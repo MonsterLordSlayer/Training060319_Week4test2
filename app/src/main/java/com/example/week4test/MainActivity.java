@@ -25,14 +25,6 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         databaseHelper=new DatabaseHelper(this);
         RestrofitExample restrofitExample=new RestrofitExample();
         coffes=new ArrayList<>();
-        fragmentManager = getSupportFragmentManager();
-        itemFragment = ItemFragment.newInstance(0);
-        itemFragment.setCoffes(coffes);
-        fragmentManager
-                .beginTransaction()
-                .add(R.id.frmPlaceHolderOne, itemFragment)
-                .addToBackStack("BLUE")
-                .commit();
         restrofitExample.getService().getCoffes().enqueue(new Callback<Coffe[]>() {
 
             @Override
@@ -47,11 +39,31 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                     }
                 }
 
-                for (Coffe coffe:databaseHelper.queryForAllCoffeRecords()){
-                    if (databaseHelper.notEmpty()==false)break;
-                    Log.d("TAG2",coffe.getName()+" "+coffe.getId());
-                    coffes.add(coffe);
-                }
+
+
+
+                runOnUiThread(new Runnable() {
+                     @Override
+                     public void run() {
+                         for (Coffe coffe:databaseHelper.queryForAllCoffeRecords()){
+                            coffes.add(coffe);
+
+                         }
+                         Log.d("TAG2",coffes.size()+" dddd");
+                         fragmentManager = getSupportFragmentManager();
+                         itemFragment = ItemFragment.newInstance(1,coffes);
+                         itemFragment.setCoffes(coffes);
+                         fragmentManager
+                                 .beginTransaction()
+                                 .add(R.id.frmPlaceHolderOne, itemFragment)
+                                 .addToBackStack("BLUE")
+                                 .commit();
+
+                     }
+                });
+
+
+
 
 
 
@@ -69,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
 
         });
+
 
 
     }

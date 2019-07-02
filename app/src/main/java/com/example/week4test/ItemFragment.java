@@ -31,7 +31,7 @@ public class ItemFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    ArrayList<Coffe> coffes;
+    static ArrayList<Coffe> coffes;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -46,7 +46,9 @@ public class ItemFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ItemFragment newInstance(int columnCount) {
+    public static ItemFragment newInstance(int columnCount,ArrayList<Coffe> coffes2) {
+        coffes=coffes2;
+        Log.d("frag", "onCreateView: "+coffes2.size());
         ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
@@ -78,8 +80,10 @@ public class ItemFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new CoffeRecyclerViewAdapter(coffes));
+
         }
-        //Log.d("frag", "onCreateView: "+coffes.get(1).getId());
+
+
         return view;
     }
 
